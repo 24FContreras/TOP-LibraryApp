@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOP - Book Library</title>
+  <!-- CSS STYLES -->
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <!-- FONTAWESOME -->
+  <script src="https://kit.fontawesome.com/1872a23027.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <h1><i class="fa-solid fa-book"></i> Librarian</h1>
+    </div>
+    <button id="createBook"><i class="fa-solid fa-plus"></i> Create new book</button>
+  </header>
+
+  <main>
+    <section id="books">
+      <template id="cardTemplate">
+        <article class="card">
+          <img src="" alt="" class="book-cover">
+          <div class="card-body">
+            <h2 class="book-name"></h2>
+            <p class="author"></p>
+            <p class="details"></p>
+          </div>
+        </article>
+      </template>
+    </section>
+
+    <!-- MODALS -->
+    <section class="modal hidden">
+      <h2>New book</h2>
+      <p>Add the details for your newest book</p>
+      <form action="" id="bookForm">
+        <input type="text" name="bookName" id="bookName" placeholder="Book name" required>
+        <input type="text" name="author" id="bookAuthor" placeholder="Author" required>
+        <input type="text" name="pages" id="bookPages" placeholder="N° of pages" required>
+        <input type="text" name="bookCover" id="bookCover" placeholder="Cover Image link" required>
+        <div class="reading-toggle">
+          <input type="checkbox" name="readStatus" id="bookStatus" class="toggle">
+          <label for="bookStatus" class="switch">Reading Status</label>
+        </div>
+        <button type="submit" id="submitBook"><i class="fa-solid fa-book-medical"></i> Submit</button>
+      </form>
+    </section>
+    <div class="overlay hidden"></div>
+
+  </main>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+  <script src="assets/js/objectContructor.js"></script>
+</body>
+
+</html>
