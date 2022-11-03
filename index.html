@@ -30,6 +30,10 @@
             <h2 class="book-name"></h2>
             <p class="author"></p>
             <p class="details"></p>
+            <div>
+              <button class="delete-book" data-bookid=""><i class="fa-solid fa-xmark"></i> Delete book</button>
+              <button class="update-book"><i class="fa-solid fa-pen-to-square"></i> Update Status</button>
+            </div>
           </div>
         </article>
       </template>
@@ -37,6 +41,7 @@
 
     <!-- MODALS -->
     <section class="modal hidden">
+      <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark fa-xl"></i></button>
       <h2>New book</h2>
       <p>Add the details for your newest book</p>
       <form action="" id="bookForm">

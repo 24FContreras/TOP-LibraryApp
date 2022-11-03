@@ -1,18 +1,27 @@
+let idCounter = 1;
+
 const bookLibrary = [
   {
+    id: 1,
     name: "Pride and Prejudice",
     author: "Jane Austen",
     pages: 279,
     isCompleted: true,
-    cover: "https://almabooks.com/wp-content/uploads/2016/10/9781847493699.jpg",
-    status: "Completed",
+    cover:
+      "https://kbimages1-a.akamaihd.net/afcd8653-3b27-4423-bee9-570fb1441aed/353/569/90/False/pride-and-prejudice-71.jpg",
+    status: function () {
+      if (this.isCompleted) return "Completed";
+      else return "Not read Yet";
+    },
     info: function () {
-      return `${this.pages} pages || ${this.status}`;
+      return `${this.pages} pages || ${this.status()}`;
     },
   },
 ];
 
-function book(name, author, pages, isCompleted, cover) {
+// BOOK CONSTRUCTOR
+function book(id, name, author, pages, isCompleted, cover) {
+  this.id = id;
   this.name = name;
   this.author = author;
   this.pages = pages;
@@ -25,12 +34,13 @@ book.prototype.info = function () {
 };
 
 book.prototype.status = function () {
-  if (this.isCompleted === true) return "Completed";
+  if (this.isCompleted) return "Completed";
   else return "Not read Yet";
 };
 
-function addBookToLibrary(name, author, pages, isCompleted, cover) {
-  const newBook = new book(name, author, pages, isCompleted, cover);
+//ADDS BOOK TO THE ARRAY
+function addBookToLibrary(id, name, author, pages, isCompleted, cover) {
+  const newBook = new book(id, name, author, pages, isCompleted, cover);
 
   bookLibrary.push(newBook);
 }
@@ -51,6 +61,13 @@ function renderCards() {
     cardTemplateClone.querySelector(".author").textContent = book.author;
     cardTemplateClone.querySelector(".details").textContent = book.info();
     cardTemplateClone.querySelector("img").src = book.cover;
+    cardTemplateClone.querySelector(".delete-book").dataset.bookid = book.id;
+    cardTemplateClone.querySelector(".delete-book").onclick = function () {
+      deleteBook(book.id);
+    };
+    cardTemplateClone.querySelector(".update-book").onclick = function () {
+      updateBook(book.id);
+    };
 
     cardFragment.appendChild(cardTemplateClone);
   });
@@ -65,11 +82,28 @@ document.querySelector("#createBook").addEventListener("click", function () {
 
   //GSAP
   const modalOnTimeline = gsap.timeline({
-    defaults: { duration: 0.5, opacity: 0 },
+    defaults: { duration: 0.5, opacity: 1 },
   });
 
-  modalOnTimeline.from(".overlay", {}).from(".modal", {}, "<.1");
+  modalOnTimeline.to(".overlay", {}).to(".modal", {}, "<.1");
 });
+
+//CLOSE THE MODAL
+function closeModal() {
+  gsap.to(".modal", 0.5, {
+    opacity: 0,
+    onComplete: function () {
+      document.querySelector(".modal").classList.add("hidden");
+    },
+  });
+
+  gsap.to(".overlay", 0.5, {
+    opacity: 0,
+    onComplete: function () {
+      document.querySelector(".overlay").classList.add("hidden");
+    },
+  });
+}
 
 //ADDS NEW BOOK AND REMOVE THE MODAL
 const bookName = document.querySelector("#bookName");
@@ -96,7 +130,9 @@ document.querySelector("#submitBook").addEventListener("click", function (e) {
     else return false;
   }
 
+  idCounter++;
   addBookToLibrary(
+    idCounter,
     bookName.value,
     bookAuthor.value,
     bookPages.value,
@@ -104,10 +140,30 @@ document.querySelector("#submitBook").addEventListener("click", function (e) {
     bookCover.value
   );
 
-  document.querySelector(".modal").classList.add("hidden");
-  document.querySelector(".overlay").classList.add("hidden");
+  closeModal();
 
   renderCards();
 });
+
+//DELETE BOOK FROM THE ARRAY
+function deleteBook(id) {
+  let bookIndex = bookLibrary.findIndex((book) => book.id == id);
+  bookLibrary.splice(bookIndex, 1);
+
+  renderCards();
+}
+
+//DELETE UPDATE BOOK FROM THE ARRAY
+function updateBook(id) {
+  let bookIndex = bookLibrary.findIndex((book) => book.id == id);
+
+  if (bookLibrary[bookIndex].isCompleted)
+    bookLibrary[bookIndex].isCompleted = false;
+  else bookLibrary[bookIndex].isCompleted = true;
+
+  renderCards();
+}
+
+document.querySelector("#closeModalBtn").addEventListener("click", closeModal);
 
 window.onload = renderCards();
